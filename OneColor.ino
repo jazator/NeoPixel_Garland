@@ -1,43 +1,41 @@
-//ЗАЛИВКА В ОДИН ЦВЕТ; цвет в формате RGB(через запятую), скорость заливки в ms (0 - сразу вся, >1 (положительное число) - заливка от начала, <1 (отрицательное число) - заливка с конца ленты).
+// OneColor(R, G, B, speed)
+// Заливка ленты одним цветом.
+//
+// Параметры:
+//   R, G, B — компоненты цвета (0..255).
+//   speed  — скорость заливки в миллисекундах на один светодиод:
+//            0  — мгновенная заливка всей ленты;
+//            >0 — заливка от начала ленты с задержкой speed;
+//            <0 — заливка от конца ленты с задержкой abs(speed).
 
-// Примеры вызова
-OneColor (255,0,255,100);
-OneColor (0,255,0,-100);
-OneColor (0,100,255,0);
+void loop() {
+  OneColor(255, 0, 255, 100);
+  OneColor(0, 255, 0, -100);
+  OneColor(0, 100, 255, 0);
+  // Можно продолжать вызывать OneColor с разными параметрами в новых строках.
+}
 
-
-
-//ЗАЛИВКА В ОДИН ЦВЕТ
-  
-  void OneColor(int r, int g, int b, int second)
-  {
-    //int n = 0; 
-    //int m = LED_COUNT;
-    if (second >= 0)
-    {
-      for (int i = 0; i < LED_COUNT; i++) 
-      {
-        strip.setPixelColor(i, strip.Color(r, g, b));
-        if (second != 0) 
-        {
-          strip.show(); // Передаем в ленту.
-          delay(second);
-        }
-      }  
-    } 
-    if (second < 0)
-    {
-      for (int i = 0; i < LED_COUNT; i++) 
-      {
-        strip.setPixelColor((LED_COUNT - i - 1), strip.Color(r, g, b));
-          strip.show(); // Передаем в ленту.
-          delay(abs(second));
-      }  
-    } 
-    
-    if (second == 0)
-    {
-      strip.show(); // Передаем в ленту.
+// ФУНКЦИЯ: заливка в один цвет.
+void OneColor(int r, int g, int b, int speed) {
+  if (speed >= 0) {
+    for (int i = 0; i < LED_COUNT; i++) {
+      strip.setPixelColor(i, strip.Color(r, g, b));
+      if (speed != 0) {
+        strip.show(); // Отправляем текущее состояние в ленту.
+        delay(speed);
+      }
     }
   }
-  //заливка в один цвет, конец
+
+  if (speed < 0) {
+    for (int i = 0; i < LED_COUNT; i++) {
+      strip.setPixelColor(LED_COUNT - i - 1, strip.Color(r, g, b));
+      strip.show(); // Отправляем текущее состояние в ленту.
+      delay(abs(speed));
+    }
+  }
+
+  if (speed == 0) {
+    strip.show(); // Мгновенно показываем результат без задержек.
+  }
+}
